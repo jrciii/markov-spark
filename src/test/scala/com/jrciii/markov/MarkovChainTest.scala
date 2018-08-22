@@ -19,7 +19,7 @@ class MarkovChainTest extends FunSpec with BeforeAndAfterAll {
     System.setProperty("spark.app.name","markov test")
     sc = new SparkContext()
     val files = sc.wholeTextFiles("src/test/resources")
-    val chain = MarkovChainGenerator.generateMarkovChain(files,2).collect.toMap
+    val chain = MarkovChainGenerator.generate(files,2).collect.toMap
     var prob = 0.99
     val text = MarkovChainTextGenerator.generate(chain, new Random() {
       override def nextInt(n: Int): Int = 0

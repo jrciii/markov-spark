@@ -3,7 +3,7 @@ package com.jrciii.markov
 import org.apache.spark.rdd.RDD
 
 object MarkovChainGenerator {
-  def generateMarkovChain(files: RDD[(String, String)], tokens: Int) = {
+  def generate(files: RDD[(String, String)], tokens: Int) = {
     def createCombiner(v: String) = Map(v -> 1L)
 
     def mergeValue(c: Map[String, Long], v: String) = c + (v -> (c.getOrElse(v, 0L) + 1L))
@@ -16,7 +16,7 @@ object MarkovChainGenerator {
       val content = t._2
       content
         .split("\\s+")
-        .map(_.replaceAll("[<>\\[\\]{}()*`~\"]",""))
+        .map(_.replaceAll("[^a-zA-Z0-9,.?!@$:;'&$#&-_+=/|\\\\^~`]",""))
         .toStream
         .sliding(tokens + 1)
         .filter(_.length != tokens)

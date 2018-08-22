@@ -1,9 +1,15 @@
 package com.jrciii.markov
 
+import java.text.DateFormat
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDateTime, ZoneId}
+
 import org.apache.spark.sql.SparkSession
 
 import scala.util.Random
-import awscala._, s3._
+import awscala._
+import org.joda.time.DateTimeZone
+import s3._
 
 object SparkApp extends App {
   implicit val s3 = S3.at(Region.US_EAST_1)
@@ -14,15 +20,20 @@ object SparkApp extends App {
   val startWordIndex = args(2).toInt
   val until = args(3).toInt
   val bucket = args(4)
-  val key = java.time.Clock.systemUTC().instant().formatted("yyyy-MM-ddThh:mm:ssZ")
+  val key = LocalDateTime.now().atZone(ZoneId.of("UTC"))
+    .format(DateTimeFormatter.ofPattern("yyyy/MM/dd/hh:mm:ss"))
 
   val chain: Map[Stream[String], List[(String, Double)]] =
-    MarkovChainGenerator.generateMarkovChain(files, tokens).collect().toMap
+    MarkovChainGenerator.generate(files, tokens).collect().toMap
 
   spark.stop()
   sc.stop()
 
-  val text = MarkovChainTextGenerator.generate(chain, new Random()).take(until).mkString(" ")
+  val words = MarkovChainTextGenerator.generate(chain, new Random()).take(until)
+  val text = words.mkString(" ")
+
   println(text)
   println("")
+  println(s3.buckets)
+  s3.putObject(bucket,key + "_" + words.size,text)
 }
