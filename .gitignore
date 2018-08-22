@@ -2,4 +2,5 @@
 project/target/
 project/project/target/
 target/
-src/test/resources/bible.txt
+src/test/resources/corpus/
+src/test/resources/SparkApp.properties
