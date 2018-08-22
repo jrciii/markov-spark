@@ -1,5 +1,5 @@
 # markov-spark
-Creates the markov chain from files in a directory in parallel, then (currently) generates the text on the driver.
+Creates the markov chain from files in a directory in parallel, then generates the text on the driver and uploads the results to S3.
 
 A sample from the Bible:
 
