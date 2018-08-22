@@ -1,5 +1,5 @@
 # markov-spark
-Generates a markov chain from files in parallel, then generates text on the host.
+Creates the markov chain from files in a directory in parallel, then (currently) generates the text on the driver.
 
 A sample from the Bible:
 
