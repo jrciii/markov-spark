@@ -4,6 +4,13 @@ version := "0.1"
 
 scalaVersion := "2.11.12"
 
+Compile/mainClass := Some("com.jrciii.markov.Main")
+
+assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case x => MergeStrategy.first
+}
+
 resolvers += "jitpack" at "https://jitpack.io"
 
 // https://mvnrepository.com/artifact/org.apache.spark/spark-sql
@@ -16,4 +23,5 @@ libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.3.0-M24"
 libraryDependencies += "com.rometools" % "rome" % "1.11.0"
 // https://mvnrepository.com/artifact/org.jsoup/jsoup
 libraryDependencies += "com.github.jhy" % "jsoup" % "master-SNAPSHOT"
-
+// https://mvnrepository.com/artifact/com.github.seratch/awscala
+libraryDependencies += "com.github.seratch" %% "awscala" % "0.7.2"
