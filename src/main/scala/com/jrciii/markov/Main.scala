@@ -36,27 +36,31 @@ object Main extends App {
     }).collect().toMap
   val first = chain.toStream.zipWithIndex.find(_._2 == startWordIndex)
   val rand = new Random()
-  def generate(key: Stream[String]) = for {
+
+  def findNext(key: Stream[String]) = for {
     possible <- chain.get(key)
     pSort = possible.sortBy(_._2)
     prob = rand.nextDouble()
     next <- pSort.find(_._2 >= prob).map(_._1)
   } yield next
-  def gen(u: Int, key: Stream[String]): Stream[String] = {
+
+  def generate(u: Int, key: Stream[String]): Stream[String] = {
     if (u == 0)
       Stream()
     else {
-      generate(key) match {
-        case Some(s) => s #:: gen(u-1,key.tail ++ Stream(s))
+      findNext(key) match {
+        case Some(s) => s #:: generate(u-1,key.tail ++ Stream(s))
         case None => Stream()
       }
     }
   }
   for {
     f <- first
-    out = f._1._1 ++ gen(until,f._1._1)
-    ex = {print(out.head)
-    out.tail.foreach(s => print(" " + s))}
+    out = f._1._1 ++ generate(until,f._1._1)
+    _ = {
+      print(out.head)
+      out.tail.foreach(s => print(" " + s))
+    }
   }
-  println("I done")
+  println("")
 }
