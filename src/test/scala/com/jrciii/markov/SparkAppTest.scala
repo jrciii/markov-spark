@@ -16,6 +16,6 @@ class SparkAppTest extends FreeSpec with BeforeAndAfterAll {
     val props = ResourceBundle.getBundle("SparkApp")
     System.setProperty("spark.master","local[*]")
     val bucket = props.getString("markov.spark.bucket")
-    SparkApp.main(Array("src/test/resources/corpus","2","0","3000",bucket))
+    SparkApp.main(Array("src/test/resources/corpus","2","0","3000",bucket,"4"))
   }
 }

@@ -1,6 +1,7 @@
 package com.jrciii.markov
 
 import org.apache.spark.SparkContext
+import org.apache.spark.sql.SparkSession
 import org.scalatest.{BeforeAndAfterAll, FreeSpec, FunSpec}
 
 import scala.util.Random
@@ -17,8 +18,8 @@ class MarkovChainTest extends FunSpec with BeforeAndAfterAll {
     System.setProperty("hadoop.home.dir", "C:\\hadoop")
     System.setProperty("spark.master","local[*]")
     System.setProperty("spark.app.name","markov test")
-    sc = new SparkContext()
-    val files = sc.wholeTextFiles("src/test/resources")
+    sc = ContextHolder.session.sparkContext
+    val files = sc.wholeTextFiles("src/test/resources/corpus")
     val chain = MarkovChainGenerator.generate(files,2).collect.toMap
     var prob = 0.99
     val text = MarkovChainTextGenerator.generate(chain, new Random() {
@@ -38,5 +39,6 @@ class MarkovChainTest extends FunSpec with BeforeAndAfterAll {
       assert(gen.size == 140)
       println(gen.mkString(" "))
     }
+    sc.stop
   }
 }
