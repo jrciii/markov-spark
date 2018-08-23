@@ -1,15 +1,13 @@
 package com.jrciii.markov
 
-import java.text.DateFormat
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDateTime, ZoneId}
 
+import awscala._
+import awscala.s3._
 import org.apache.spark.sql.SparkSession
 
 import scala.util.Random
-import awscala._
-import org.joda.time.DateTimeZone
-import s3._
 
 object SparkApp extends App {
   implicit val s3 = S3.at(Region.US_EAST_1)
@@ -25,7 +23,7 @@ object SparkApp extends App {
 
   val files = sc.wholeTextFiles(args(0), parts)
 
-  val chain: Map[Stream[String], List[(String, Double)]] =
+  val chain: Map[List[String], List[(String, Double)]] =
     MarkovChainGenerator.generate(files, tokens).collect().toMap
 
   spark.stop()

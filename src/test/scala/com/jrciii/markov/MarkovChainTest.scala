@@ -32,7 +32,7 @@ class MarkovChainTest extends FunSpec with BeforeAndAfterAll {
     })
     it("should create the correct chain") {
       println(chain.size)
-      println(chain.get(Stream("the","LORD")))
+      println(chain.get(List("the","LORD")))
     }
     it("should create the correct text") {
       val gen = text.take(140)
