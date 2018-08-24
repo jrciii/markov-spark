@@ -1,6 +1,18 @@
 # markov-spark
-Creates the markov chain from files in a directory in parallel, then generates the text on the driver and uploads the results to S3.
+Creates the markov chain from files in a directory in parallel. The records produced are in the following format:
 
-A sample from the Bible:
+keyWord1 SPACE keyWord2 (...rest of keywords) TAB nextWord1 SPACE cummulativeProbability TAB (...rest of word/probability pairs)
 
-Our father died in mount Zion to a lad, saying, Go, fall upon it. Thou, O God, when thou shalt overlay it with my voice, I will come to betray him unto Antioch. And it came to the ground; And should not enter into the hand of the army of the inner house, the most by three, and their maidens were not able to see corruption. Thou hast made Judah and Jerusalem from the LORD. The rich man also confess before the LORD, Ye shall eat the fat, and tear their claws in pieces. As a servant unto my voice; arise, flee thou to do what seemeth good unto him. Forasmuch then as the Egyptians mourned for the LORD that made the waters of the holy oblation foursquare, with the burnt offering unto the LORD: and his mother and thy rage against me, therefore hid I my brother's keeper? And he built up in the sepulchre with his brother were, Ulam his firstborn, and Buz his brother, the son of Sacar the fourth, and Rapha the fifth. Ammiel the sixth, Eliel the chief, and said unto him, Draw thy sword, and his strength is in them of the high priest, they delivered Samaria out of the merchants, over against his lord. If they shall be the man did lift up unto them. For the priesthood of the Lord said, I will stain all my statutes, and the great sea. And this shall be satisfied with favour, and thy store. Blessed shalt thou take her son's daughter, or the nakedness of thy harvest is fallen. And gladness is taken away from us. And thy brethren within any of them. And Gideon the son of man. So Moab was distressed because of affliction, yet shall ye eat.
+Example output:
+
+Hors d'oeuvres, and 1.0 which 0.75      she 0.5 assorted 0.375  said 0.25       salad, 0.125
+
+Maryland, marched       gallantly 1.0
+
+Longobards themselves.  Symonds 1.0
+
+Pontifical Curia,       at 1.0
+
+their syllabic  charm. 1.0000000000000002       analysis. 0.8888888888888891    value 0.7777777777777779        divisions 0.6666666666666667    quantities 0.5555555555555556   combinations 0.4444444444444444 combinations. 0.3333333333333333        correspondence 0.2222222222222222
+
+The [markov-text-generator](https://github.com/jrciii/markov-text-generator) project reads these files to generate text!
