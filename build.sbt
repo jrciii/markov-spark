@@ -25,3 +25,7 @@ libraryDependencies += "com.rometools" % "rome" % "1.11.0"
 libraryDependencies += "com.github.jhy" % "jsoup" % "master-SNAPSHOT"
 // https://mvnrepository.com/artifact/com.github.seratch/awscala
 libraryDependencies += "com.github.seratch" %% "awscala" % "0.7.2"
+// https://mvnrepository.com/artifact/net.openhft/chronicle-map
+libraryDependencies += "net.openhft" % "chronicle-map" % "3.16.0"
+// https://mvnrepository.com/artifact/org.apache.commons/commons-compress
+libraryDependencies += "org.apache.commons" % "commons-compress" % "1.18"

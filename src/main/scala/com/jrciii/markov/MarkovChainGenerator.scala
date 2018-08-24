@@ -2,11 +2,11 @@ package com.jrciii.markov
 
 import org.apache.spark.rdd.RDD
 
-import scalaz._
-import Scalaz._
-
 object MarkovChainGenerator {
-  def generate(files: RDD[(String, String)], tokens: Int) = {
+  val wsRegex = "\\s+".r
+  val toStrip = "[^a-zA-Z0-9,.?!@$:;'&$#&-_+=/|\\\\^~`]".r
+
+  def generate(files: RDD[String], tokens: Int) = {
     def createCombiner(v: String) = Map(v -> 1L)
 
     def mergeValue(c: Map[String, Long], v: String) = c + (v -> (c.getOrElse(v, 0L) + 1L))
@@ -15,11 +15,9 @@ object MarkovChainGenerator {
       acc + (x._1 -> (x._2 + acc.getOrElse(x._1, 0L)))
     })
 
-    files.flatMap(t => {
-      val content = t._2
-      content
-        .split("\\s+")
-        .map(_.replaceAll("[^a-zA-Z0-9,.?!@$:;'&$#&-_+=/|\\\\^~`]",""))
+    files.flatMap(content => {
+      wsRegex.split(content)
+        .map(s => toStrip.replaceAllIn(s,""))
         .toList
         .sliding(tokens + 1)
         .filter(_.length != tokens)
@@ -27,9 +25,9 @@ object MarkovChainGenerator {
     }).combineByKey(createCombiner, mergeValue, mergeContainers)
       .mapValues(m => {
         val total = m.values.sum.toDouble
-        val s = m.mapValues(_ / total).toList
-        s.tail.foldr(List(s.head))(x => acc => {
-          (x._1, acc.head._2 + x._2) :: acc
+        val s = m.mapValues(_ / total)
+        s.tail.foldLeft(List(s.head))((acc,x) => {
+          (x._1, x._2 + acc.head._2) :: acc
         })
       })
   }
