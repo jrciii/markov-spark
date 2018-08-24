@@ -7,6 +7,7 @@ class SparkAppTest extends FreeSpec with BeforeAndAfterAll {
     System.getProperties.put("hadoop.home.dir", "C:\\hadoop")
   }
 
+  // TODO assert file is written
   "The app should run" in {
     System.setProperty("spark.master","local[*]")
     SparkApp.main(Array("src/test/resources/corpus","2","0","3000","target/markov_chain","4"))
