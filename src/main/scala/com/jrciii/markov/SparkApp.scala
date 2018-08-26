@@ -22,12 +22,4 @@ object SparkApp extends App {
   MarkovChainGenerator
     .generate(files, tokens)
     .saveAsTextFile(out + "/" + key, classOf[BZip2Codec])
-
-  /*val words = MarkovChainTextGenerator.generate(chain, new Random()).take(until)
-  val text = words.mkString(" ")
-
-  println(text)
-  println("")
-  println(s3.buckets)
-  s3.putObject(bucket,key + "_" + words.size,text)*/
 }
