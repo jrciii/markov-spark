@@ -4,7 +4,7 @@ import org.apache.spark.rdd.RDD
 
 object MarkovChainGenerator {
   val wsRegex = "\\s+".r
-  val toStrip = "[^a-zA-Z0-9,.?!@$:;'&$#&-_+=/|\\\\^~`]".r
+  val toStrip = "[^a-zA-Z0-9,.?!@$:;'&$#&\\-_+=/|\\\\^~`]".r
 
   def generate(files: RDD[String], tokens: Int) = {
     def createCombiner(v: String) = Map(v -> 1L)
@@ -20,15 +20,15 @@ object MarkovChainGenerator {
         .map(s => toStrip.replaceAllIn(s,""))
         .toList
         .sliding(tokens + 1)
-        .filter(_.length != tokens)
-        .map(l => (l.init, l.last))
+        .filter(_.length == tokens + 1)
+        .map(l => (l.init.mkString(" "), l.last))
     }).combineByKey(createCombiner, mergeValue, mergeContainers)
-      .mapValues(m => {
-        val total = m.values.sum.toDouble
-        val s = m.mapValues(_ / total)
-        s.tail.foldLeft(List(s.head))((acc,x) => {
+      .map(m => {
+        val total = m._2.values.sum.toDouble
+        val s = m._2.mapValues(_ / total)
+        m._1 + "\t" + s.tail.foldLeft(List(s.head))((acc,x) => {
           (x._1, x._2 + acc.head._2) :: acc
-        })
+        }).map(t => t._1 + " " + t._2).mkString("\t")
       })
   }
 }

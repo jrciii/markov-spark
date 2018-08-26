@@ -19,13 +19,8 @@ object SparkApp extends App {
 
   val files = sc.wholeTextFiles(args(0), parts).map(_._2)
 
-  def formatChain[A,B](v: (List[A], List[(A, B)])) = {
-    v._1.mkString(" ") + '\t' + v._2.map(t => t._1 + " " + t._2).mkString("\t")
-  }
-
   MarkovChainGenerator
     .generate(files, tokens)
-    .map(formatChain)
     .saveAsTextFile(out + "/" + key, classOf[BZip2Codec])
 
   /*val words = MarkovChainTextGenerator.generate(chain, new Random()).take(until)
